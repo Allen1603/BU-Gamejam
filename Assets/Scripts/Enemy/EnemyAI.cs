@@ -3,6 +3,7 @@ using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
+[RequireComponent(typeof(EnemyDissolve))]
 public class EnemyAI : MonoBehaviour
 {
     [Header("References")]
@@ -30,22 +31,26 @@ public class EnemyAI : MonoBehaviour
     private bool isCatching;
 
     [Header("Dazzle Settings")]
-    public float dazzleResistance = 100f;   // "Health" before disappearing
-    public float retreatSpeed = 1.5f;       // Backward speed when dazzled
-    public float dazzleDecayDelay = 0.5f;   // Time before it stops retreating
+    public float dazzleResistance = 100f;
+    public float retreatSpeed = 1.5f;
+    public float dazzleDecayDelay = 0.5f;
+
     private bool isRetreating;
     private bool isDying;
+    private Coroutine retreatRoutine;
 
     [Header("Rotation")]
     public float rotationSpeed = 10f;
 
     private bool playerInSightRange;
     private bool playerInCatchRange;
-    private Coroutine retreatRoutine;
+
+    private EnemyDissolve dissolveSystem;
 
     private void Awake()
     {
         if (agent == null) agent = GetComponent<NavMeshAgent>();
+        dissolveSystem = GetComponent<EnemyDissolve>();
     }
 
     private void Update()
@@ -92,7 +97,6 @@ public class EnemyAI : MonoBehaviour
             agent.SetDestination(walkPoint);
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
-
         if (distanceToWalkPoint.magnitude < 1f)
         {
             walkPointSet = false;
@@ -126,7 +130,6 @@ public class EnemyAI : MonoBehaviour
     private void ChasePlayer()
     {
         if (player == null) return;
-
         agent.isStopped = false;
         agent.SetDestination(player.position);
         FaceTarget(player);
@@ -146,11 +149,8 @@ public class EnemyAI : MonoBehaviour
         agent.isStopped = true;
         FaceTarget(player);
 
-        Debug.Log("Enemy caught the player!");
-
         PlayerController controller = player.GetComponent<PlayerController>();
-        if (controller != null)
-            controller.enabled = false;
+        if (controller != null) controller.enabled = false;
 
         Rigidbody rb = player.GetComponent<Rigidbody>();
         if (rb != null)
@@ -176,9 +176,7 @@ public class EnemyAI : MonoBehaviour
 
     private void KillPlayer()
     {
-        if (player != null)
-            player.SetParent(null);
-
+        if (player != null) player.SetParent(null);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -194,11 +192,15 @@ public class EnemyAI : MonoBehaviour
         if (isDying) return;
 
         dazzleResistance -= amount;
+
         if (retreatRoutine == null)
             retreatRoutine = StartCoroutine(Retreat());
 
-        if (dazzleResistance <= 0)
-            StartCoroutine(Disappear());
+        if (dazzleResistance <= 0 && !isDying)
+        {
+            isDying = true;
+            dissolveSystem.StartDissolve(); // call dissolve system
+        }
     }
 
     private IEnumerator Retreat()
@@ -207,7 +209,6 @@ public class EnemyAI : MonoBehaviour
         agent.isStopped = true;
 
         float timer = 0f;
-
         while (timer < dazzleDecayDelay)
         {
             if (player == null) break;
@@ -226,34 +227,6 @@ public class EnemyAI : MonoBehaviour
         retreatRoutine = null;
     }
 
-    private IEnumerator Disappear()
-    {
-        isDying = true;
-        agent.isStopped = true;
-
-        Renderer[] renderers = GetComponentsInChildren<Renderer>();
-        float fadeTime = 1.5f;
-        float elapsed = 0f;
-
-        while (elapsed < fadeTime)
-        {
-            float alpha = Mathf.Lerp(1f, 0f, elapsed / fadeTime);
-            foreach (Renderer r in renderers)
-            {
-                if (r.material.HasProperty("_Color"))
-                {
-                    Color c = r.material.color;
-                    c.a = alpha;
-                    r.material.color = c;
-                }
-            }
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        Destroy(gameObject);
-    }
-
     // ---------------- UTILITY ----------------
     private void FaceTarget(Transform target)
     {
@@ -267,11 +240,8 @@ public class EnemyAI : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, sightRange);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, catchRange);
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, walkPointRange);
+        Gizmos.color = Color.red; Gizmos.DrawWireSphere(transform.position, sightRange);
+        Gizmos.color = Color.yellow; Gizmos.DrawWireSphere(transform.position, catchRange);
+        Gizmos.color = Color.blue; Gizmos.DrawWireSphere(transform.position, walkPointRange);
     }
 }
