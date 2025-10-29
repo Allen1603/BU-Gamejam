@@ -65,10 +65,10 @@ MonoBehaviour:
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.3
+    m_Value: 1
   response:
     m_OverrideState: 1
-    m_Value: 0.8
+    m_Value: 1
   texture:
     m_OverrideState: 1
     m_Value: {fileID: 0}
@@ -155,7 +155,7 @@ MonoBehaviour:
     m_Value: 2
   focalLength:
     m_OverrideState: 1
-    m_Value: 50
+    m_Value: 65
   bladeCount:
     m_OverrideState: 1
     m_Value: 5
@@ -208,4 +208,4 @@ MonoBehaviour:
   active: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 0.1
+    m_Value: 1
