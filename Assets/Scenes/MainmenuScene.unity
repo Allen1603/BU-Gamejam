@@ -265,7 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sourceMusic: {fileID: 1927836087}
   sfxSource: {fileID: 1137002791}
-  mainmenuMusic: {fileID: 8300000, guid: 154a0f0443e9c8e48afb6f4e0a43e4f4, type: 3}
+  mainmenuMusic: {fileID: 8300000, guid: e4699660a0fe7b345b7deb1b056c2854, type: 3}
 --- !u!4 &442827788
 Transform:
   m_ObjectHideFlags: 0
@@ -1851,7 +1851,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2861,7 +2861,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1232583160}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 0.5
+  m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
@@ -4483,7 +4483,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 100
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500

@@ -16,28 +16,9 @@ public class Mainmenu : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
-
     public void Quit()
     {
         Application.Quit();
     }
-    public void Pause()
-    {
-        Time.timeScale = 0;
-    }
-
-    public void Home()
-    {
-        Time.timeScale = 1;
-        SceneManager.LoadScene(0);
-    }
-    public void Restart()
-    {
-        Time.timeScale = 1;
-        SceneManager.LoadScene(1);
-    }
-    public void Unplay()
-    {
-        Time.timeScale = 1;
-    }
+    
 }
