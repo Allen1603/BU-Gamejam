@@ -10,6 +10,8 @@ public class AudioManager : MonoBehaviour
 
     [Header("----Audio Clip-----")]
     public AudioClip mainmenuMusic;
+    public AudioClip ingameMusic;
+    public AudioClip cutsceneMusic;
 
     private void Awake()
     {
@@ -30,7 +32,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void StopBGM()
+    public void StopBGM(AudioClip clip)
     {
         sourceMusic.Stop();
     }

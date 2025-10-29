@@ -265,7 +265,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sourceMusic: {fileID: 1927836087}
   sfxSource: {fileID: 1137002791}
-  mainmenuMusic: {fileID: 8300000, guid: e4699660a0fe7b345b7deb1b056c2854, type: 3}
+  mainmenuMusic: {fileID: 8300000, guid: 082a63670fd9fd844a92b6a6451385f9, type: 3}
+  ingameMusic: {fileID: 8300000, guid: e4699660a0fe7b345b7deb1b056c2854, type: 3}
+  cutsceneMusic: {fileID: 8300000, guid: 768ed542a9076c449b3ea67bbb2d7614, type: 3}
 --- !u!4 &442827788
 Transform:
   m_ObjectHideFlags: 0
@@ -972,7 +974,7 @@ RectTransform:
   m_Father: {fileID: 891076154}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2430,8 +2432,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 83007243}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2863,7 +2865,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -3315,7 +3317,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: StoryScene
+          m_StringArgument: IntroCutScene
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1542322945
@@ -4878,7 +4880,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -59, y: -200}
+  m_AnchoredPosition: {x: -190, y: -200}
   m_SizeDelta: {x: 200, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2118545442

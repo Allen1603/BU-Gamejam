@@ -8,7 +8,9 @@ public class Mainmenu : MonoBehaviour
 {
     private void Start()
     {
-        AudioManager.instance.PlayBGM(AudioManager.instance.mainmenuMusic);
+        if (AudioManager.instance != null)
+            AudioManager.instance.PlayBGM(AudioManager.instance.mainmenuMusic);
+
         Time.timeScale = 1;
     }
     public void Play(string sceneName)
