@@ -72,8 +72,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dissolveTime: 1.5
-  dissolveProperty: _DissolveAmount
+  dissolveProperty: _Dissolve
   useSimpleFade: 1
+  dissolveMaterial: {fileID: 0}
 --- !u!114 &7873282315900171154
 MonoBehaviour:
   m_ObjectHideFlags: 0

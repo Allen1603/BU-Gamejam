@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dissolveTime: 1.5
-  dissolveProperty: _DissolveAmount
+  dissolveProperty: _Dissolve
   useSimpleFade: 1
   dissolveMaterial: {fileID: 2100000, guid: 972c63c69e19c6d45aa562bb204bc4e5, type: 2}
 --- !u!114 &8385220573181144343
