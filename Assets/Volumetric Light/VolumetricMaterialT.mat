@@ -69,7 +69,7 @@ Material:
     m_Floats:
     - Boolean_52C16ADA: 1
     - Vector1_C436030E: 7.2
-    - Vector1_D9BD7578: 0.4
+    - Vector1_D9BD7578: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:

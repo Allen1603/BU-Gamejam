@@ -106,4 +106,34 @@ public class FlashlightController : MonoBehaviour
     {
         isRecharging = value;
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (flashlightLight == null)
+            return;
+
+        Gizmos.color = Color.yellow;
+
+        // Draw a line representing the beam direction
+        Vector3 start = flashlightLight.transform.position;
+        Vector3 direction = flashlightLight.transform.forward;
+        Vector3 end = start + direction * maxDistance;
+        Gizmos.DrawLine(start, end);
+
+        // Draw a sphere at the max distance
+        Gizmos.DrawWireSphere(end, 0.2f);
+
+        // Optionally draw cone bounds
+        float halfAngle = flashlightLight.spotAngle * 0.5f;
+        Vector3 right = Quaternion.Euler(0, halfAngle, 0) * direction;
+        Vector3 left = Quaternion.Euler(0, -halfAngle, 0) * direction;
+        Vector3 up = Quaternion.Euler(halfAngle, 0, 0) * direction;
+        Vector3 down = Quaternion.Euler(-halfAngle, 0, 0) * direction;
+
+        Gizmos.DrawLine(start, start + right * maxDistance);
+        Gizmos.DrawLine(start, start + left * maxDistance);
+        Gizmos.DrawLine(start, start + up * maxDistance);
+        Gizmos.DrawLine(start, start + down * maxDistance);
+    }
+
 }
