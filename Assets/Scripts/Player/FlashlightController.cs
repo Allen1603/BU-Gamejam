@@ -20,6 +20,8 @@ public class FlashlightController : MonoBehaviour
     public LayerMask enemyMask;         // Assign your "Enemy" layer
 
     private bool isOn = false;
+    public bool IsOn => isOn;
+
 
     private void Start()
     {
