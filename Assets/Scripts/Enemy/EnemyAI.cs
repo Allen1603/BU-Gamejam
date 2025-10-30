@@ -46,16 +46,24 @@ public class EnemyAI : MonoBehaviour
     private bool playerInCatchRange;
 
     private EnemyDissolve dissolveSystem;
+    private Animator animator;
 
     private void Awake()
     {
         if (agent == null) agent = GetComponent<NavMeshAgent>();
         dissolveSystem = GetComponent<EnemyDissolve>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Update()
     {
         if (isDying || isRetreating) return;
+        float speed = agent.velocity.magnitude;
+        animator.SetFloat("Speed", speed);
+
+
+        animator.SetBool("IsDazzled", isRetreating);
+        animator.SetBool("IsGrabbing", isCatching);
 
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
         playerInCatchRange = Physics.CheckSphere(transform.position, catchRange, playerMask);
@@ -94,7 +102,7 @@ public class EnemyAI : MonoBehaviour
             SearchWalkPoint();
 
         if (walkPointSet)
-            agent.SetDestination(walkPoint);
+            agent.SetDestination(walkPoint);    
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
         if (distanceToWalkPoint.magnitude < 1f)
@@ -145,6 +153,8 @@ public class EnemyAI : MonoBehaviour
     // ---------------- CATCHING ----------------
     private void CatchPlayer()
     {
+        if (isCatching) return;
+        animator.SetBool("IsGrabbing", true);
         isCatching = true;
         agent.isStopped = true;
         FaceTarget(player);
@@ -183,6 +193,7 @@ public class EnemyAI : MonoBehaviour
     private void ResetCatch()
     {
         isCatching = false;
+        animator.SetBool("IsGrabbing", false);
         agent.isStopped = false;
     }
 
@@ -206,6 +217,7 @@ public class EnemyAI : MonoBehaviour
     private IEnumerator Retreat()
     {
         isRetreating = true;
+        animator.SetBool("IsDazzled", true);
         agent.isStopped = true;
 
         float timer = 0f;
@@ -223,6 +235,7 @@ public class EnemyAI : MonoBehaviour
         }
 
         isRetreating = false;
+        animator.SetBool("IsDazzled", false);
         agent.isStopped = false;
         retreatRoutine = null;
     }
