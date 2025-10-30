@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+    private void Start()
+    {
+        if(AudioManager.instance != null)
+            AudioManager.instance.PlayBGM(AudioManager.instance.ingameMusic);
+    }
     public void Pause()
     {
         Time.timeScale = 0;
