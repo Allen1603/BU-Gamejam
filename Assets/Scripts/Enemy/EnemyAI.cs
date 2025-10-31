@@ -47,12 +47,15 @@ public class EnemyAI : MonoBehaviour
 
     private EnemyDissolve dissolveSystem;
     private Animator animator;
+    private Animator playerAnimator;
 
     private void Awake()
     {
         if (agent == null) agent = GetComponent<NavMeshAgent>();
+        if (player == null) player = GameObject.FindGameObjectWithTag("Player").transform;
         dissolveSystem = GetComponent<EnemyDissolve>();
         animator = GetComponentInChildren<Animator>();
+        playerAnimator = player.GetComponentInChildren<Animator>();
     }
 
     private void Update()
@@ -154,46 +157,45 @@ public class EnemyAI : MonoBehaviour
     private void CatchPlayer()
     {
         if (isCatching) return;
-        animator.SetBool("IsGrabbing", true);
+
         isCatching = true;
         agent.isStopped = true;
+
+        // Start grab animation
+        animator.SetBool("IsGrabbing", true);
         FaceTarget(player);
 
+        // Disable player movement now, but don't snap yet
         PlayerController controller = player.GetComponent<PlayerController>();
         if (controller != null) controller.enabled = false;
 
         Rigidbody rb = player.GetComponent<Rigidbody>();
         if (rb != null)
         {
+            if (!rb.isKinematic)
+                rb.velocity = Vector3.zero;
+
             rb.isKinematic = true;
-            rb.velocity = Vector3.zero;
         }
 
-        if (grabHoldPoint != null)
-        {
-            player.SetParent(grabHoldPoint);
-            player.localPosition = Vector3.zero;
-        }
-        else
-        {
-            player.SetParent(transform);
-            player.localPosition = new Vector3(0, 1, 0.5f);
-        }
 
-        Invoke(nameof(KillPlayer), 2f);
-        Invoke(nameof(ResetCatch), catchCooldown);
+        // The player will be snapped in SnapGrab()
+        // This delay will depend on your animation event timing
     }
 
-    private void KillPlayer()
+    // Called by Animation Event
+
+    public void KillPlayer()
     {
         if (player != null) player.SetParent(null);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    private void ResetCatch()
+    public void ResetCatch()
     {
         isCatching = false;
         animator.SetBool("IsGrabbing", false);
+        playerAnimator.SetBool("IsGrabbed", false);
         agent.isStopped = false;
     }
 
