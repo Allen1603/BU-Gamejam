@@ -12,8 +12,6 @@ public class AudioManager : MonoBehaviour
     public AudioClip mainmenuMusic;
     public AudioClip ingameMusic;
     public AudioClip cutsceneMusic;
-    public AudioClip grabEnemy;
-    public AudioClip enemyDisolve;
 
     private void Awake()
     {

@@ -72,8 +72,6 @@ public class EnemyDissolve : MonoBehaviour
             yield return null;
         }
 
-        if (AudioManager.instance != null)
-            AudioManager.instance.Playsfx(AudioManager.instance.enemyDisolve);
         // Final state (fully dissolved)
         SetValue(1f);
 
