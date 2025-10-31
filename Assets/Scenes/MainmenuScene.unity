@@ -895,8 +895,6 @@ MonoBehaviour:
   mainmenuMusic: {fileID: 8300000, guid: 082a63670fd9fd844a92b6a6451385f9, type: 3}
   ingameMusic: {fileID: 8300000, guid: e4699660a0fe7b345b7deb1b056c2854, type: 3}
   cutsceneMusic: {fileID: 8300000, guid: 768ed542a9076c449b3ea67bbb2d7614, type: 3}
-  grabEnemy: {fileID: 8300000, guid: b70baf235c38bf042abda3229f9dd417, type: 3}
-  enemyDisolve: {fileID: 8300000, guid: c3e9e73cfac26a349af9dd42d394cb70, type: 3}
 --- !u!4 &442827788
 Transform:
   m_ObjectHideFlags: 0
