@@ -1,15 +1,15 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class ChangeScene : MonoBehaviour
+public class ChangeToHome : MonoBehaviour
 {
     public float changeTime = 3f;
 
     private void Start()
     {
-        if(AudioManager.instance != null)
+        if (AudioManager.instance != null)
             AudioManager.instance.PlayBGM(AudioManager.instance.cutsceneMusic);
     }
 
@@ -20,7 +20,7 @@ public class ChangeScene : MonoBehaviour
         // Start fade once time is up
         if (changeTime <= 0)
         {
-            SceneManager.LoadSceneAsync(2);
+            SceneManager.LoadSceneAsync(0);
         }
     }
 }
