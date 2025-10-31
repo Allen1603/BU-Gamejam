@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class FlashlightController : MonoBehaviour
 {
@@ -15,13 +15,19 @@ public class FlashlightController : MonoBehaviour
     public bool isRecharging = false;
 
     [Header("Flashlight Beam Settings")]
-    public float maxDistance = 10f;     // Light range
-    public float dazzleRate = 20f;      // How fast enemies get "burned" by light
-    public LayerMask enemyMask;         // Assign your "Enemy" layer
+    public float maxDistance = 10f;
+    public float dazzleRate = 20f;
+    public LayerMask enemyMask;
+
+    [Header("Beam Spread Settings")]
+    [Range(3, 30)] public int rayCount = 10;     // Number of rays within the cone
+    [Range(5f, 90f)] public float spreadAngle = 25f; // Width of the cone in degrees
+
+    [Header("UI Settings")]
+    public Slider batterySlider;
 
     private bool isOn = false;
     public bool IsOn => isOn;
-
 
     private void Start()
     {
@@ -29,12 +35,20 @@ public class FlashlightController : MonoBehaviour
             flashlightObject.SetActive(false);
         if (flashlightLight != null)
             flashlightLight.enabled = false;
+
+        if (batterySlider != null)
+        {
+            batterySlider.minValue = 0;
+            batterySlider.maxValue = 100;
+            batterySlider.value = battery;
+        }
     }
 
     private void Update()
     {
         HandleInput();
         HandleBattery();
+        UpdateBatteryUI();
 
         if (isOn)
             DazzleEnemies();
@@ -70,6 +84,12 @@ public class FlashlightController : MonoBehaviour
         }
     }
 
+    private void UpdateBatteryUI()
+    {
+        if (batterySlider != null)
+            batterySlider.value = battery;
+    }
+
     private void TurnOn()
     {
         isOn = true;
@@ -84,17 +104,43 @@ public class FlashlightController : MonoBehaviour
         if (flashlightLight != null) flashlightLight.enabled = false;
     }
 
+    /// <summary>
+    /// Casts multiple rays in a cone to detect enemies and apply dazzle effect.
+    /// </summary>
     private void DazzleEnemies()
     {
-        Ray ray = new Ray(flashlightLight.transform.position, flashlightLight.transform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, enemyMask))
+        Vector3 origin = flashlightLight.transform.position;
+        Vector3 forward = flashlightLight.transform.forward;
+
+        for (int i = 0; i < rayCount; i++)
         {
-            EnemyAI enemy = hit.collider.GetComponentInParent<EnemyAI>();
-            if (enemy != null)
+            // Random direction within the cone
+            Vector3 randomDirection = RandomDirectionInCone(forward, spreadAngle);
+            if (Physics.Raycast(origin, randomDirection, out RaycastHit hit, maxDistance, enemyMask))
             {
-                enemy.ApplyDazzle(dazzleRate * Time.deltaTime);
+                EnemyAI enemy = hit.collider.GetComponentInParent<EnemyAI>();
+                if (enemy != null)
+                {
+                    enemy.ApplyDazzle(dazzleRate * Time.deltaTime);
+                }
             }
+
+            // Debug visualization
+#if UNITY_EDITOR
+            Debug.DrawRay(origin, randomDirection * maxDistance, Color.yellow, 0.02f);
+#endif
         }
+    }
+
+    /// <summary>
+    /// Returns a random direction vector within a cone.
+    /// </summary>
+    private Vector3 RandomDirectionInCone(Vector3 forward, float angle)
+    {
+        float randomYaw = Random.Range(-angle / 2f, angle / 2f);
+        float randomPitch = Random.Range(-angle / 2f, angle / 2f);
+        Quaternion rotation = Quaternion.Euler(randomPitch, randomYaw, 0);
+        return rotation * forward;
     }
 
     public void RechargeBattery(float amount)
@@ -113,27 +159,22 @@ public class FlashlightController : MonoBehaviour
             return;
 
         Gizmos.color = Color.yellow;
-
-        // Draw a line representing the beam direction
         Vector3 start = flashlightLight.transform.position;
-        Vector3 direction = flashlightLight.transform.forward;
-        Vector3 end = start + direction * maxDistance;
-        Gizmos.DrawLine(start, end);
+        Vector3 forward = flashlightLight.transform.forward;
 
-        // Draw a sphere at the max distance
-        Gizmos.DrawWireSphere(end, 0.2f);
+        // Draw main direction
+        Gizmos.DrawLine(start, start + forward * maxDistance);
 
-        // Optionally draw cone bounds
-        float halfAngle = flashlightLight.spotAngle * 0.5f;
-        Vector3 right = Quaternion.Euler(0, halfAngle, 0) * direction;
-        Vector3 left = Quaternion.Euler(0, -halfAngle, 0) * direction;
-        Vector3 up = Quaternion.Euler(halfAngle, 0, 0) * direction;
-        Vector3 down = Quaternion.Euler(-halfAngle, 0, 0) * direction;
+        // Draw cone bounds
+        float halfAngle = spreadAngle * 0.5f;
+        Vector3 right = Quaternion.Euler(0, halfAngle, 0) * forward;
+        Vector3 left = Quaternion.Euler(0, -halfAngle, 0) * forward;
+        Vector3 up = Quaternion.Euler(halfAngle, 0, 0) * forward;
+        Vector3 down = Quaternion.Euler(-halfAngle, 0, 0) * forward;
 
         Gizmos.DrawLine(start, start + right * maxDistance);
         Gizmos.DrawLine(start, start + left * maxDistance);
         Gizmos.DrawLine(start, start + up * maxDistance);
         Gizmos.DrawLine(start, start + down * maxDistance);
     }
-
 }

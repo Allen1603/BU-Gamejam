@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1544630038576713605}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Grabpoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1043144953928784355}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: joint3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4187010445940637208}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: joint5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6109881937947646842}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: joint2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,7 +140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 215625297165014889}
   - component: {fileID: 355406456878030961}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pCube10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,7 +230,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1738064353435031310}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: group1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -270,7 +270,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7218741290769430467}
   - component: {fileID: 2239310007318952393}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pCube17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -363,7 +363,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4081299624273293868}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: joint8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -395,7 +395,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3994611081750242225}
   - component: {fileID: 4041635907276766795}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pCube7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -484,7 +484,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7934487893571326358}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: joint6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -516,7 +516,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1300876689243080516}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: joint1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -548,7 +548,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6488148753049720083}
   - component: {fileID: 2709673589795382774}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pCube18
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -643,7 +643,7 @@ GameObject:
   - component: {fileID: 3240442877250270802}
   - component: {fileID: 4574205915138702799}
   - component: {fileID: 229253226441498185}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: patianak_Animations
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -711,7 +711,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 246359903783298716}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: joint7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -743,7 +743,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5363062804755867792}
   - component: {fileID: 5185313428530303129}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pCube4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -832,7 +832,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1896536320699580052}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: joint4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -864,7 +864,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8826215861853939782}
   - component: {fileID: 7496823901652637624}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pCube11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -958,7 +958,7 @@ GameObject:
   - component: {fileID: 9011746291121169946}
   - component: {fileID: 6951275403313659880}
   - component: {fileID: 2466767030953364896}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Patianak
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1062,7 +1062,7 @@ MonoBehaviour:
   playerMask:
     serializedVersion: 2
     m_Bits: 8
-  grabHoldPoint: {fileID: 0}
+  grabHoldPoint: {fileID: 1544630038576713605}
   walkPointRange: 7
   idleTime: 5
   sightRange: 8
@@ -1083,7 +1083,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2901830106752108988}
   - component: {fileID: 7262970312405944084}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pCube12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1174,7 +1174,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4661756596769595159}
   - component: {fileID: 5079100428126028850}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pCube9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
