@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class FlashlightController : MonoBehaviour
 {
     [Header("Flashlight Settings")]
     public GameObject flashlightObject;
     public Light flashlightLight;
-    public KeyCode holdKey = KeyCode.E;
 
     [Header("Battery Settings")]
     [Range(0, 100)] public float battery = 100f;
@@ -20,14 +20,34 @@ public class FlashlightController : MonoBehaviour
     public LayerMask enemyMask;
 
     [Header("Beam Spread Settings")]
-    [Range(3, 30)] public int rayCount = 10;     // Number of rays within the cone
-    [Range(5f, 90f)] public float spreadAngle = 25f; // Width of the cone in degrees
+    [Range(3, 30)] public int rayCount = 10;
+    [Range(5f, 90f)] public float spreadAngle = 25f;
 
     [Header("UI Settings")]
     public Slider batterySlider;
 
+    private PlayerControls input;
+    private bool flashlightHeld = false;
     private bool isOn = false;
     public bool IsOn => isOn;
+
+    private void Awake()
+    {
+        input = new PlayerControls();
+
+        input.Player.Flashlight.performed += ctx => flashlightHeld = true;
+        input.Player.Flashlight.canceled += ctx => flashlightHeld = false;
+    }
+
+    private void OnEnable()
+    {
+        input.Player.Enable();
+    }
+
+    private void OnDisable()
+    {
+        input.Player.Disable();
+    }
 
     private void Start()
     {
@@ -56,7 +76,7 @@ public class FlashlightController : MonoBehaviour
 
     private void HandleInput()
     {
-        if (Input.GetKey(holdKey) && battery > 0f)
+        if (flashlightHeld && battery > 0f)
         {
             if (!isOn) TurnOn();
         }
@@ -104,9 +124,6 @@ public class FlashlightController : MonoBehaviour
         if (flashlightLight != null) flashlightLight.enabled = false;
     }
 
-    /// <summary>
-    /// Casts multiple rays in a cone to detect enemies and apply dazzle effect.
-    /// </summary>
     private void DazzleEnemies()
     {
         Vector3 origin = flashlightLight.transform.position;
@@ -114,8 +131,8 @@ public class FlashlightController : MonoBehaviour
 
         for (int i = 0; i < rayCount; i++)
         {
-            // Random direction within the cone
             Vector3 randomDirection = RandomDirectionInCone(forward, spreadAngle);
+
             if (Physics.Raycast(origin, randomDirection, out RaycastHit hit, maxDistance, enemyMask))
             {
                 EnemyAI enemy = hit.collider.GetComponentInParent<EnemyAI>();
@@ -125,20 +142,16 @@ public class FlashlightController : MonoBehaviour
                 }
             }
 
-            // Debug visualization
 #if UNITY_EDITOR
             Debug.DrawRay(origin, randomDirection * maxDistance, Color.yellow, 0.02f);
 #endif
         }
     }
 
-    /// <summary>
-    /// Returns a random direction vector within a cone.
-    /// </summary>
     private Vector3 RandomDirectionInCone(Vector3 forward, float angle)
     {
-        float randomYaw = Random.Range(-angle / 2f, angle / 2f);
-        float randomPitch = Random.Range(-angle / 2f, angle / 2f);
+        float randomYaw = Random.Range(-angle * 0.5f, angle * 0.5f);
+        float randomPitch = Random.Range(-angle * 0.5f, angle * 0.5f);
         Quaternion rotation = Quaternion.Euler(randomPitch, randomYaw, 0);
         return rotation * forward;
     }
@@ -151,30 +164,5 @@ public class FlashlightController : MonoBehaviour
     public void SetRecharging(bool value)
     {
         isRecharging = value;
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (flashlightLight == null)
-            return;
-
-        Gizmos.color = Color.yellow;
-        Vector3 start = flashlightLight.transform.position;
-        Vector3 forward = flashlightLight.transform.forward;
-
-        // Draw main direction
-        Gizmos.DrawLine(start, start + forward * maxDistance);
-
-        // Draw cone bounds
-        float halfAngle = spreadAngle * 0.5f;
-        Vector3 right = Quaternion.Euler(0, halfAngle, 0) * forward;
-        Vector3 left = Quaternion.Euler(0, -halfAngle, 0) * forward;
-        Vector3 up = Quaternion.Euler(halfAngle, 0, 0) * forward;
-        Vector3 down = Quaternion.Euler(-halfAngle, 0, 0) * forward;
-
-        Gizmos.DrawLine(start, start + right * maxDistance);
-        Gizmos.DrawLine(start, start + left * maxDistance);
-        Gizmos.DrawLine(start, start + up * maxDistance);
-        Gizmos.DrawLine(start, start + down * maxDistance);
     }
 }
