@@ -57,6 +57,9 @@ public class EnemyDissolve : MonoBehaviour
     {
         isDissolving = true;
 
+        if (AudioManager.instance != null)
+            AudioManager.instance.Playsfx(AudioManager.instance.enemyDisolve);
+
         // Swap to dissolve materials only when dissolve starts
         SwapToDissolveMaterials();
 
@@ -71,9 +74,6 @@ public class EnemyDissolve : MonoBehaviour
             SetValue(value);
             yield return null;
         }
-
-        if (AudioManager.instance != null)
-            AudioManager.instance.Playsfx(AudioManager.instance.enemyDisolve);
         // Final state (fully dissolved)
         SetValue(1f);
 

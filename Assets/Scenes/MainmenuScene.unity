@@ -893,10 +893,12 @@ MonoBehaviour:
   sourceMusic: {fileID: 1927836087}
   sfxSource: {fileID: 1137002791}
   mainmenuMusic: {fileID: 8300000, guid: 082a63670fd9fd844a92b6a6451385f9, type: 3}
-  ingameMusic: {fileID: 8300000, guid: e4699660a0fe7b345b7deb1b056c2854, type: 3}
+  ingameMusic: {fileID: 8300000, guid: f33cdc6ebca3d734f9c635d61d4b44da, type: 3}
   cutsceneMusic: {fileID: 8300000, guid: 768ed542a9076c449b3ea67bbb2d7614, type: 3}
   grabEnemy: {fileID: 8300000, guid: b70baf235c38bf042abda3229f9dd417, type: 3}
   enemyDisolve: {fileID: 8300000, guid: c3e9e73cfac26a349af9dd42d394cb70, type: 3}
+  chargingSFX: {fileID: 8300000, guid: 2f8a234c2cd161b48b1fc632278283cd, type: 3}
+  coinCollectSFX: {fileID: 8300000, guid: 6f6e3c1626a50ae4cb60c4770570c886, type: 3}
 --- !u!4 &442827788
 Transform:
   m_ObjectHideFlags: 0

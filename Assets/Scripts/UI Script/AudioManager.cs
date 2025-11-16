@@ -12,8 +12,12 @@ public class AudioManager : MonoBehaviour
     public AudioClip mainmenuMusic;
     public AudioClip ingameMusic;
     public AudioClip cutsceneMusic;
+
+    [Header("----SFX Clip-----")]
     public AudioClip grabEnemy;
     public AudioClip enemyDisolve;
+    public AudioClip chargingSFX;
+    public AudioClip coinCollectSFX;
 
     private void Awake()
     {

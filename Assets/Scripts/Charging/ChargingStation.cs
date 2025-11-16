@@ -103,6 +103,7 @@ public class ChargingStation : MonoBehaviour
 
     private void StartCharging()
     {
+        
         if (isCharging || flashlight == null || playerController == null) return;
 
         // Deduct currency immediately
@@ -118,6 +119,9 @@ public class ChargingStation : MonoBehaviour
                 return;
             }
         }
+
+        if (AudioManager.instance != null)
+            AudioManager.instance.Playsfx(AudioManager.instance.chargingSFX);
 
         isCharging = true;
 

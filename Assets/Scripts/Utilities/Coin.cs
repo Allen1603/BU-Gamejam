@@ -16,6 +16,9 @@ public class Coin : MonoBehaviour
     {
         if (collected) return;
 
+        if (AudioManager.instance != null)
+            AudioManager.instance.Playsfx(AudioManager.instance.coinCollectSFX);
+
         // Check if the colliding object has the PlayerCurrency component
         PlayerCurrency playerCurrency = other.GetComponent<PlayerCurrency>();
         if (playerCurrency == null) return;

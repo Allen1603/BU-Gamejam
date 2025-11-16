@@ -31,9 +31,11 @@ public class EnemyGrabAnim : MonoBehaviour
         else
             player.localPosition += Vector3.up * 0.9f;
 
-        playerAnimator.SetBool("IsGrabbed", true);
         if (AudioManager.instance != null)
             AudioManager.instance.Playsfx(AudioManager.instance.grabEnemy);
+
+        playerAnimator.SetBool("IsGrabbed", true);
+        
         // Schedule player kill and reset
         StartCoroutine(DelayedActions());
     }
