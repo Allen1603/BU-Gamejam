@@ -17,9 +17,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/EndingCutScene.unity
     guid: b5931ae1c473da843884cf552dafb616
-  - enabled: 0
-    path: Assets/Scenes/Scene_HomeVillage.unity
-    guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: cb1e31962e939f8439de3b4a6a1563af,
       type: 2}

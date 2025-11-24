@@ -1,32 +1,55 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ChargingStation : MonoBehaviour
 {
     [Header("Charging Settings")]
-    public float chargeRate = 25f;            // How fast it charges the player's flashlight
-    public float detectionRadius = 2f;        // Radius for detecting player
-    public KeyCode interactKey = KeyCode.E;   // Key to start charging
+    public float chargeRate = 25f;
+    public float detectionRadius = 2f;
 
     [Header("Station Battery Settings")]
-    [Range(0, 100)] public float stationBattery = 100f;  // Station's internal power
-    public float drainRate = 20f;                         // How fast the station loses power when charging
-    public float rechargeRate = 5f;                       // Optional: auto-recharge rate (if desired)
-    public bool autoRecharge = false;                     // If true, it slowly recharges itself over time
+    [Range(0, 100)] public float stationBattery = 100f;
+    public float drainRate = 20f;
+    public float rechargeRate = 5f;
+    public bool autoRecharge = false;
 
     [Header("Currency Cost Settings")]
-    public bool useCurrencyCost = true;                   // Whether to charge currency for charging
-    public int currencyCost = 10;                         // One-time cost to charge to full
+    public bool useCurrencyCost = true;
+    public int currencyCost = 10;
 
     [Header("References")]
-    public FlashlightController flashlight; // Assign player flashlight
-    public Light stationLight;              // Optional indicator light
-    public LayerMask playerLayer;           // Assign Player layer
+    public FlashlightController flashlight;
+    public Light stationLight;
+    public LayerMask playerLayer;
 
     private bool isPlayerNearby;
     private bool isCharging;
+    private bool hasPaid;
+
     private PlayerController playerController;
     private PlayerCurrency playerCurrency;
-    private bool hasPaid = false;
+
+    // Input System
+    private PlayerControls input;
+    private InputAction chargeAction;
+
+    private void Awake()
+    {
+        input = new PlayerControls();
+        chargeAction = input.Player.Charge;
+
+        chargeAction.performed += OnChargePressed;
+    }
+
+    private void OnEnable()
+    {
+        input.Enable();
+    }
+
+    private void OnDisable()
+    {
+        input.Disable();
+    }
 
     private void Update()
     {
@@ -34,41 +57,25 @@ public class ChargingStation : MonoBehaviour
 
         bool hasPower = stationBattery > 0f;
         bool flashlightNotFull = flashlight != null && flashlight.battery < 100f;
-        bool hasEnoughCurrency = !useCurrencyCost || (playerCurrency != null && playerCurrency.CurrentCurrency >= currencyCost);
 
-        // Handle charging start with E key
-        if (isPlayerNearby && !isCharging && Input.GetKeyDown(interactKey) && hasPower && flashlightNotFull && hasEnoughCurrency)
+        if (isCharging && flashlightNotFull && hasPower)
         {
-            StartCharging();
-        }
-
-        // Handle charging process
-        if (isCharging && flashlight != null && hasPower && flashlightNotFull)
-        {
-            // Charge flashlight
             flashlight.RechargeBattery(chargeRate * Time.deltaTime);
+
             stationBattery -= drainRate * Time.deltaTime;
             stationBattery = Mathf.Max(0f, stationBattery);
 
-            // Check if charging is complete
             if (flashlight.battery >= 100f)
-            {
                 StopCharging();
-            }
         }
         else if (isCharging && (!hasPower || !flashlightNotFull))
         {
-            // Conditions no longer met, stop charging
             StopCharging();
         }
 
-        // Allow player to cancel charging by moving away
         if (isCharging && !isPlayerNearby)
-        {
             StopCharging();
-        }
 
-        // Optional self-recharge logic
         if (autoRecharge && !isCharging && stationBattery < 100f)
         {
             stationBattery += rechargeRate * Time.deltaTime;
@@ -83,55 +90,54 @@ public class ChargingStation : MonoBehaviour
         Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, playerLayer);
         isPlayerNearby = hits.Length > 0;
 
-        // Get player components if nearby
-        if (isPlayerNearby && (playerController == null || playerCurrency == null || flashlight == null))
-        {
-            foreach (var hit in hits)
-            {
-                if (playerController == null)
-                    playerController = hit.GetComponent<PlayerController>();
-                if (playerCurrency == null)
-                    playerCurrency = hit.GetComponent<PlayerCurrency>();
-                if (flashlight == null)
-                    flashlight = hit.GetComponentInChildren<FlashlightController>();
+        if (!isPlayerNearby) return;
 
-                if (playerController != null && playerCurrency != null && flashlight != null)
-                    break;
-            }
+        foreach (var hit in hits)
+        {
+            if (playerController == null)
+                playerController = hit.GetComponent<PlayerController>();
+
+            if (playerCurrency == null)
+                playerCurrency = hit.GetComponent<PlayerCurrency>();
+
+            if (flashlight == null)
+                flashlight = hit.GetComponentInChildren<FlashlightController>();
         }
+    }
+
+    private void OnChargePressed(InputAction.CallbackContext ctx)
+    {
+        if (!isPlayerNearby) return;
+        if (isCharging) return;
+        if (flashlight == null) return;
+        if (flashlight.battery >= 100f) return;
+        if (stationBattery <= 0f) return;
+
+        if (useCurrencyCost && playerCurrency != null && !hasPaid)
+        {
+            if (playerCurrency.DeductCurrency(currencyCost))
+                hasPaid = true;
+            else
+                return;
+        }
+
+        StartCharging();
     }
 
     private void StartCharging()
     {
-        
-        if (isCharging || flashlight == null || playerController == null) return;
-
-        // Deduct currency immediately
-        if (useCurrencyCost && playerCurrency != null && !hasPaid)
-        {
-            if (playerCurrency.DeductCurrency(currencyCost))
-            {
-                hasPaid = true;
-            }
-            else
-            {
-                // Not enough currency, don't start charging
-                return;
-            }
-        }
+        if (isCharging) return;
 
         if (AudioManager.instance != null)
             AudioManager.instance.Playsfx(AudioManager.instance.chargingSFX);
 
         isCharging = true;
 
-        // Disable player movement
-        playerController.enabled = false;
+        if (playerController != null)
+            playerController.enabled = false;
 
-        // Set recharging state in flashlight (this will handle the flashlight behavior)
-        flashlight.SetRecharging(true);
-
-        Debug.Log("Charging started - Player movement disabled, flashlight in recharge mode");
+        if (flashlight != null)
+            flashlight.SetRecharging(true);
     }
 
     private void StopCharging()
@@ -140,20 +146,13 @@ public class ChargingStation : MonoBehaviour
 
         isCharging = false;
 
-        // Re-enable player movement
         if (playerController != null)
             playerController.enabled = true;
 
-        // Stop recharging state in flashlight
         if (flashlight != null)
-        {
             flashlight.SetRecharging(false);
-        }
 
-        // Reset payment status
         hasPaid = false;
-
-        Debug.Log("Charging stopped - Player movement enabled");
     }
 
     private void UpdateStationLight()
@@ -167,7 +166,7 @@ public class ChargingStation : MonoBehaviour
         }
         else if (flashlight != null && flashlight.battery >= 100f)
         {
-            stationLight.color = Color.cyan; // indicate flashlight full
+            stationLight.color = Color.cyan;
             stationLight.intensity = 3f;
         }
         else if (isCharging)
